@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>住所から郵便番号を割り出すサンプル</title>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+function ZipFromAddress(addr){
+	$.ajax({
+		url: './ajax_addr2zipcode.php',
+		dataType: 'text',
+		data: {addr: addr},
+		type: 'GET',
+		async: false,
+		cache: false,
+		success: function(res) {
+			var obj = JSON.parse(res)
+			if ( obj.result ) {
+				$('#zipcode').val(obj.zipcode);
+			} else {
+				for ( var i in obj.errors ) {
+					alert(obj.errors[i]);
+				}
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+//			alert(textStatus);
+		},
+		complete: function(XMLHttpRequest, textStatus){
+		},
+	});
+}
+</script>
+</head>
+<body>
+	<h1>住所から郵便番号を割り出すサンプル</h1>
+	<form>
+		住所：<input type="text" name="addr" id="addr" value="" size="60"><input type="button" name="addr2zipcode" id="addr2zipcode" value="郵便番号を割り出す" onclick="ZipFromAddress($('#addr').val());"><br>
+		　〒：<input type="text" name="zipcode" id="zipcode" value="" size="12"><br>
+	</form>
+</body>
+</html>
